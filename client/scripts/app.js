@@ -14,7 +14,7 @@ var main = function (toDoObjects) {
 			$element.addClass("active");
 			$("main .content").empty();
 
-			if ($element.parent().is(":nth-child(1)")) {
+			if ($element.parent().is(":nth-child(1)")) {	//Вкладка "Новые"
 
 				$content = $("<ul>");
 
@@ -23,7 +23,7 @@ var main = function (toDoObjects) {
 
 				}
 				$("main .content").append($content);
-			} else if ($element.parent().is(":nth-child(2)")) {
+			} else if ($element.parent().is(":nth-child(2)")) {		//Вкладка "Старые"
 
 				$content = $("<ul>");
 
@@ -32,11 +32,10 @@ var main = function (toDoObjects) {
 				});
 
 				$("main .content").append($content);
-			} else if ($element.parent().is(":nth-child(3)")) {
+			} else if ($element.parent().is(":nth-child(3)")) {		//Вкладка "Теги"
 
 				var organizedByTag = [];
 				organizedByTag = organizedByTags(toDoObjects);
-				console.log(organizedByTag); 
 
 				organizedByTag.forEach (function (tag) {
 					var $tagName = $("<h3>").text(tag.name),
@@ -49,17 +48,37 @@ var main = function (toDoObjects) {
 					$("main .content").append($tagName);
 					$("main .content").append($content);
 				});
-			} else if ($element.parent().is(":nth-child(4)")) {
+			} else if ($element.parent().is(":nth-child(4)")) {		//Вкладка "Добавить"
 
 				var $input = $("<input>"),
-				$button = $("<button>").text("+");
+				$button = $("<button>").text("+"),
+				$tagInput= $("<input>");
 
 				$button.on("click", function () {
-					toDos.push($input.val());
-					$input.val("");
+
+					var description = $input.val(),
+					tags = $tagInput.val().split(","),
+					newToDo;
+
+					newToDo = {"description":description, "tags":tags};
+
+					$.post("todos", newToDo, function(result) {
+
+						console.log(result);
+
+						toDoObjects.push(newToDo);
+
+						toDos = toDoObjects.map(function (toDo) {
+							return toDo.description;
+						});
+
+						$input.val("");
+						$tagInput.val("");
+
+					});					
 				});
 
-				$content = $("<div>").append($input).append($button);
+				$content = $("<div>").append($input).append($tagInput).append($button);
 				$("main .content").append($content);
 			}
 			return false;
@@ -101,6 +120,5 @@ var organizedByTags = function (toDoObjects) {
 		return { "name" : tag, "toDos" : toDoWithTag };
 	});
 	
-	console.log(tagObjects);
 	return tagObjects;
 };

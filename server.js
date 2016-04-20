@@ -1,5 +1,7 @@
 var express = require("express"),
 	http = require("http"),
+	bodyParser = require("body-parser"),
+	urlencodedParser = bodyParser.urlencoded({extended: false});
 	app = express(),
 	toDos = [
 		{
@@ -26,12 +28,21 @@ var express = require("express"),
 			"description" : "Закончить писать книгу",
 			"tags" : ["писательство", "работа"]
 		}
-	];
+	]; 
 
 app.use(express.static(__dirname + "/client"));
 http.createServer(app).listen(3000);
 console.log ("Server listen in port 3000");
 
-app.get("todos.json", function(req,res) {
+app.get("/todos.json", function(req,res) {
 	res.json(toDos);
+});
+
+app.post ("/todos", urlencodedParser, function(req,res) {
+
+	var newToDo = req.body;
+	console.log(newToDo);
+	toDos.push(newToDo)
+
+	res.json({"message" : "Вы разместили данные на сервере!"});
 });
