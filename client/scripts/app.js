@@ -97,17 +97,17 @@ $(document).ready(function () {
 
 var organizedByTags = function (toDoObjects) {
 
-	var tags = [];
+	var tagsArray = [];
 
 	toDoObjects.forEach (function (toDo) {
 		toDo.tags.forEach (function (tag){
-			if (tags.indexOf(tag) === -1) {
-				tags.push(tag);
+			if (tagsArray.indexOf(tag) === -1) {
+				tagsArray.push(tag);
 			}
 		});
 	});
 
-	var tagObjects = tags.map (function (tag){
+	var tagObjects = tagsArray.map (function (tag){
 
 		var toDoWithTag = [];
 

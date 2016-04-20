@@ -33,9 +33,11 @@ main {
 	background: white;
 	overflow: auto;
 	padding: 45px;
+	min-height: 510px;
 }
 
 footer {
+
 	padding: 40px;
 	overflow: auto;
 }
